@@ -28,15 +28,15 @@ judgment call needed.
 
 ## Flow
 
-1. **Pick the target file.** Default to global scope
-   (`~/.claude/CLAUDE.md` or `~/.claude/rules/*.md`) — most standing
-   preferences are general habits, not project quirks. Sanity-check
-   yourself first: if the rule only makes sense for the current repo
-   (names this project's specific stack/files/conventions), say so and
-   ask instead of assuming global. If an existing rules file already
-   covers this exact topic (e.g. a commit-format rule belongs in
-   `rules/git-workflow.md`, which already exists), edit that one instead
-   of CLAUDE.md directly — don't invent a new file.
+1. **Pick the target file.** Default to global scope, `~/.claude/CLAUDE.md`
+   directly — most standing preferences are general habits, not project
+   quirks, and unless the user has set up a `rules/*.md` split, there's
+   just the one file. Sanity-check yourself first: if the rule only makes
+   sense for the current repo (names this project's specific stack/files/
+   conventions), say so and ask instead of assuming global. If a
+   `rules/*.md` split-by-topic convention exists (check for a `rules/`
+   directory before assuming there isn't one), edit the matching topic
+   file instead of CLAUDE.md directly — don't invent a new file either way.
 
 2. **Make sure the request is clear.** If it's already unambiguous, skip
    straight to step 3. Only ask a clarifying question if something is
