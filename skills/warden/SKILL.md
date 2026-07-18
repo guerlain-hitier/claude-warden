@@ -51,6 +51,12 @@ judgment call needed.
 4. **Write it and show the diff.** A short diff of the actual change, not
    a rewritten dump of the file.
 
+5. **Sync, if the edit was global.** If `~/.claude` is a git repo (check
+   for `~/.claude/.git`) and the edit touched `~/.claude/CLAUDE.md` or
+   anything under `~/.claude/skills/` or `~/.claude/commands/`, commit it
+   there too (one-line conventional message, same as any other commit) and
+   mention pushing — don't push without asking first.
+
 ## Don't
 
 - Don't build a second file/store/hook for anything. If it needs to be
