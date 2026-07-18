@@ -1,38 +1,17 @@
 # Warden
 
-A CLAUDE.md maintainer for Claude Code. Turns steering language — "I want
-comments a certain way," "never do X," "always run tests first" — into a
-correctly-scoped, well-formed, appropriately-sized rule instead of an ad hoc
-edit you have to word yourself.
+Keeps CLAUDE.md clean. When you state a standing preference — "I want
+comments a certain way," "never do X," "always run tests first" — Warden
+notices, confirms it once, writes it into whichever file already governs
+that topic (your global `~/.claude/CLAUDE.md` / `rules/*.md`, or the
+current project's), and shows you the diff. No new file formats, no hooks,
+no config to maintain — just your existing CLAUDE.md, edited a little more
+carefully than doing it by hand mid-conversation.
 
-Two independent pieces:
-
-- **A skill + `/rule` command** that asks clarifying questions one at a
-  time, offers a compliant/non-compliant example when a request is
-  ambiguous, checks whether the rule belongs in your global
-  `~/.claude/CLAUDE.md` or the current project, and enforces a size budget
-  so your rules files stay in the range Claude actually follows.
-- **A `UserPromptSubmit` hook** that re-injects a short, explicitly-curated
-  set of *invariant* rules on every single turn, read live off disk — so
-  they can't be lost to context compaction or a long session's summarized
-  history the way ordinary CLAUDE.md content can. See
-  [`docs/research.md`](docs/research.md) for the community research this is
-  built on (what survives compaction, what doesn't, and why).
-
-## Why
-
-CLAUDE.md files rot two ways: they grow past the point where Claude reliably
-follows everything in them, and — separately — path-scoped or nested rules
-can vanish from a long session's context after compaction summarizes the
-history they were loaded into. Warden addresses both: it pushes back on
-padding when you ask it to add a rule, and it gives you a second, hook-based
-channel for the handful of rules that must never depend on being "still in
-context."
+This is not a rules engine for teams enforcing company policy. It's for one
+person who's tired of repeating the same correction every session.
 
 ## Install
-
-Requires [Node.js](https://nodejs.org) (used by the hook itself and the
-settings.json merge step).
 
 **macOS / Linux / Git Bash:**
 ```bash
@@ -48,39 +27,28 @@ cd claude-warden
 ./install.ps1
 ```
 
-The installer only adds files under `~/.claude/` (skill, command, hook
-script, and an empty `hard-rules.md` template) and additively merges one
-`UserPromptSubmit` hook entry into `~/.claude/settings.json`. It never
-overwrites your `CLAUDE.md`, never removes existing hooks, and is safe to
-re-run.
+Copies a skill and a `/rule` command into `~/.claude/`. Never touches your
+CLAUDE.md or settings.json. Safe to re-run.
 
 ## Use
 
 ```
-/rule always use conventional commit messages
+/rule always run tests before committing
 ```
 
-or just say it in conversation — "from now on, always run tests before
-committing" — and the warden skill will pick it up, ask anything it needs to
-before writing, tell you which file it's targeting and why, and show you the
-exact text before touching anything.
+or just say it in conversation. Warden asks a clarifying question only if
+something's actually unclear, defaults new rules to global scope (flagging
+if something looks project-specific instead), then shows the exact rule and
+file before writing anything, plus a diff after.
 
-To mark something as a true invariant (survives compaction, re-injected
-every turn — keep this rare):
-
-```
-/rule --hard never force-push to main
-```
+It stays quiet for one-off requests ("fix this bug") — it only engages for
+things you're stating as a standing preference.
 
 ## Repo layout
 
 ```
-skills/warden/SKILL.md   the interactive rule-formulation skill
-commands/rule.md         the /rule slash command shim
-hooks/warden-inject.mjs  UserPromptSubmit hook: re-injects hard-rules.md live
-scripts/merge-settings.mjs  additive settings.json merge used by installers
-docs/research.md         sourced research this design is based on
-docs/design.md           the design spec this was built from
+skills/warden/SKILL.md   the skill: when it fires, how it picks a file, how it confirms
+commands/rule.md         the /rule slash command
 install.sh / install.ps1 installers
 ```
 
