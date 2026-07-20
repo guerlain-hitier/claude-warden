@@ -75,18 +75,41 @@ thing you must not skip even when the request otherwise seems unambiguous.
 
 ## Step 3 — Hard vs soft
 
-Default every rule to **soft**: it lives in CLAUDE.md / a rules file, loaded
-once per session like everything else there.
+Every rule goes in CLAUDE.md / a rules file. Hard is a **promotion on top of
+that**, not a different destination: the rule stays in CLAUDE.md and is
+additionally injected every turn. That way it degrades to a normal rule if
+`warden-invariants` is ever uninstalled, instead of silently vanishing.
 
-Route to **hard** when the user runs `/rule --hard <text>`, or when they
-explicitly say the rule must hold no matter what — "always enforce this",
-"no matter how long the session runs", "even if you forget everything else",
-"this is non-negotiable" — or describes an invariant a markdown-only rule
-wouldn't reliably survive (security gates, destructive-command bans, secret
-handling). Outside the explicit `--hard` flag, confirm before treating
-something as hard; it's a meaningfully different mechanism (a
-`UserPromptSubmit` hook shipped by this plugin), not just "an important
-rule".
+**Assess every rule for hard-viability, every time.** Don't wait to be
+asked. Most rules fail this test, and saying so takes one clause.
+
+A rule is hard-viable when all four hold:
+1. **Violation is expensive or irreversible**, or the rule is a style
+   invariant that visibly erodes over long sessions (force-pushing, secret
+   handling, destructive commands, tone and formatting habits).
+2. **It applies on every turn**, not only to certain file types, languages,
+   or tasks. A conditional rule burns the injection budget on turns where
+   it's irrelevant.
+3. **It fits one line** without losing meaning.
+4. **It isn't already reliably followed.** If drift has never been a
+   problem, soft placement is doing its job.
+
+Route to hard without re-litigating when the user runs
+`/warden:rule --hard <text>`, or says it must hold no matter what ("always
+enforce this", "no matter how long the session runs", "this is
+non-negotiable").
+
+Otherwise: if it passes all four, surface it as an option inside the Step 4
+confirmation, with the reason, in one line. Don't make it a separate
+question. If it fails, place it soft and say nothing unless asked.
+
+> "Adding to `~/.claude/CLAUDE.md`. This one also looks like it'd drift over
+> a long session, so I can promote it to a hard rule (injected every turn,
+> 5 of 15 lines used). Want that too, or CLAUDE.md alone?"
+
+The user decides both sides. Never promote silently, and never remove a hard
+rule on your own initiative; auto-removal of an invariant is a silent
+failure the user can't see. Removals happen only when asked.
 
 Hard rules live in:
 - Global: `~/.claude/warden/hard-rules.md`
@@ -111,20 +134,25 @@ say so plainly and let the user choose:
 Never write to hard-rules.md while pretending it's taking effect.
 
 **Cap hard-rules.md at ~15 lines total, one line per rule.** It gets
-re-injected into every single prompt by a hook — padding it defeats the
-purpose and becomes its own context-rot source. If it's already near the
-cap, say so and ask the user to either trim an existing entry or accept
-soft placement instead:
+re-injected into every single prompt, so padding it defeats the purpose and
+becomes its own context-rot source. Lines past the cap are silently dropped
+by the hook, so never let the file exceed it. If it's already near the cap,
+say so and ask the user to either trim an existing entry or accept soft
+placement instead:
 
-> "hard-rules.md is already at 13 lines — this gets injected on every turn,
-> so I'd rather not pad it further. Trim something, or is soft (regular
-> CLAUDE.md) fine for this one?"
+> "hard-rules.md is already at 13 lines. This gets injected on every turn,
+> so I'd rather not pad it further. Trim something, or is CLAUDE.md alone
+> fine for this one?"
 
 ## Step 4 — Confirm before writing
 
 Show the exact text you're about to write and the exact file path. Wait for
-explicit confirmation. Do not write speculative wording — write what you'd
+explicit confirmation. Do not write speculative wording; write what you'd
 actually commit.
+
+If Step 3 found the rule hard-viable, fold that into this same message as a
+yes/no rider, with the current line count. One message, one decision point,
+covering both destinations.
 
 ## Step 5 — Size budget
 
@@ -141,13 +169,16 @@ Before writing, count the target file's current lines.
 ## Step 6 — Write and offer to commit
 
 Make the edit. If the target file lives inside a git repository, offer to
-commit it — never commit without asking, and never batch it in with unrelated
+commit it; never commit without asking, and never batch it in with unrelated
 changes.
 
 ## What NOT to do
 
 - Don't write anything before Step 4's explicit confirmation.
 - Don't ask more than one question per message.
-- Don't treat "hard" as a synonym for "important" — it's a mechanism choice,
+- Don't treat "hard" as a synonym for "important". It's a mechanism choice,
   confirm it explicitly.
+- Don't promote a rule to hard without the user saying yes, and don't remove
+  an existing hard rule unless asked. Silent removal of an invariant is a
+  failure the user has no way to notice.
 - Don't let a rule request turn into unrelated cleanup of the target file.
