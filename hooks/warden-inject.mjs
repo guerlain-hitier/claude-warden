@@ -35,7 +35,9 @@ function main() {
     // malformed/absent stdin JSON — proceed with process.cwd()
   }
 
-  const globalPath = join(homedir(), ".claude", "warden", "hard-rules.md");
+  // must match the install scripts, which honor the same override
+  const configDir = process.env.CLAUDE_CONFIG_DIR || join(homedir(), ".claude");
+  const globalPath = join(configDir, "warden", "hard-rules.md");
   const projectPath = join(cwd, ".claude", "warden", "hard-rules.md");
 
   const globalRules = readHardRules(globalPath);
