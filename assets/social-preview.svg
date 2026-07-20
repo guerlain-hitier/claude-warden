@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1117"/>
+      <stop offset="100%" stop-color="#171327"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1280" height="640" fill="url(#bg)"/>
+  <rect x="0" y="0" width="1280" height="4" fill="url(#glow)"/>
+
+  <text x="96" y="112" font-family="FiraCode Nerd Font Mono" font-size="20"
+        letter-spacing="2" fill="#6b6b85">CLAUDE CODE PLUGIN</text>
+
+  <!-- shield -->
+  <g transform="translate(96,168)">
+    <path d="M40 0 L80 16 L80 52 C80 78 62 96 40 104 C18 96 0 78 0 52 L0 16 Z"
+          fill="none" stroke="#8b5cf6" stroke-width="3.5" stroke-linejoin="round"/>
+    <path d="M22 50 L35 64 L60 36" fill="none" stroke="#8b5cf6" stroke-width="3.5"
+          stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <text x="212" y="238" font-family="DejaVu Sans" font-weight="bold" font-size="96" fill="#f2f2f7">Warden</text>
+  <text x="216" y="300" font-family="DejaVu Sans" font-size="31" fill="#adadbe">Keep your CLAUDE.md small, and your</text>
+  <text x="216" y="342" font-family="DejaVu Sans" font-size="31" fill="#adadbe">non-negotiables unforgettable.</text>
+
+  <!-- terminal strip -->
+  <rect x="96" y="418" width="1088" height="120" rx="10" fill="#12121d" stroke="#2b2b3d" stroke-width="1.5"/>
+  <text x="132" y="464" font-family="FiraCode Nerd Font Mono" font-size="21" fill="#6a6a80">you:</text>
+  <text x="196" y="464" font-family="FiraCode Nerd Font Mono" font-size="21" fill="#c9c9da">from now on, commit messages should be one line, no body</text>
+  <text x="132" y="504" font-family="FiraCode Nerd Font Mono" font-size="21" fill="#8b5cf6">warden:</text>
+  <text x="236" y="504" font-family="FiraCode Nerd Font Mono" font-size="21" fill="#c9c9da">added to ~/.claude/CLAUDE.md, injected every turn</text>
+</svg>
