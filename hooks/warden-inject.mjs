@@ -11,9 +11,11 @@ const MAX_LINES = 15; // keep the injected block tiny — see SKILL.md Step 3
 
 function readHardRules(path) {
   if (!existsSync(path)) return null;
-  const text = readFileSync(path, "utf8").trim();
+  // strip the editor-facing comment header; it's guidance for whoever edits
+  // the file, not a rule, and it would eat the line budget every turn
+  const text = readFileSync(path, "utf8").replace(/<!--[\s\S]*?-->/g, "").trim();
   if (!text) return null;
-  const lines = text.split("\n").slice(0, MAX_LINES);
+  const lines = text.split("\n").filter((l) => l.trim()).slice(0, MAX_LINES);
   return lines.join("\n");
 }
 
