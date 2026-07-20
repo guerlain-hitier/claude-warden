@@ -1,0 +1,12 @@
+{
+  "name": "warden",
+  "description": "Turns standing preferences into well-formed, correctly-scoped CLAUDE.md rules, and re-injects a handful of invariant rules on every prompt so they survive context compaction. Personal steering, not org-scale policy enforcement.",
+  "version": "0.1.0",
+  "author": {
+    "name": "guerlain-hitier",
+    "url": "https://github.com/guerlain-hitier"
+  },
+  "repository": "https://github.com/guerlain-hitier/claude-warden",
+  "license": "MIT",
+  "keywords": ["claude-md", "rules", "hooks", "context", "memory"]
+}

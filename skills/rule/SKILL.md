@@ -1,6 +1,6 @@
 ---
-name: warden
-description: Turns steering language ("I want comments a certain way", "always/never do X", "from now on...") or an explicit /rule command into a well-formed, correctly-scoped CLAUDE.md / rules-file edit. Asks clarifying questions one at a time, offers compliant/non-compliant examples when a request is ambiguous, checks whether a rule belongs in the global vs the current project's CLAUDE.md, enforces a size budget so files stay in the range Claude actually follows, and routes true invariants to a hook-based mechanism that survives context compaction instead of plain markdown. Use whenever the user is dictating a preference, correction, or standing instruction about how you should behave — not just when they type /rule.
+name: rule
+description: Turns steering language ("I want comments a certain way", "always/never do X", "from now on...") into a well-formed, correctly-scoped CLAUDE.md rule. Asks one clarifying question at a time, decides global vs project scope, enforces a size budget, and routes true invariants to a hook that survives context compaction. Use whenever the user dictates a standing preference about how you should behave, not just when they type /warden:rule.
 ---
 
 # Warden
@@ -14,11 +14,20 @@ never to write first and ask later.
 - Passive: the user states a preference, correction, or standing instruction
   in normal conversation — "I want X done a certain way", "stop doing Y",
   "from now on always/never Z", "make sure you always...".
-- Explicit: the user runs `/rule <text>`. Same protocol, just skip the
-  passive-detection step.
+- Explicit: the user runs `/warden:rule <text>`. Same protocol, just skip
+  the passive-detection step.
 
 Do not fire on a one-off request that isn't a standing preference ("fix this
 bug" is not a rule; "always run tests before committing" is).
+
+## Arguments
+
+`$ARGUMENTS`
+
+If that is empty, ask what rule they want to add. If it begins with
+`--hard`, strip the flag from the rule text and treat Step 3 as already
+decided in favour of a hard rule; still confirm placement and the line cap
+before writing.
 
 ## Step 1 — Understand the request
 
@@ -75,13 +84,18 @@ explicitly say the rule must hold no matter what — "always enforce this",
 "this is non-negotiable" — or describes an invariant a markdown-only rule
 wouldn't reliably survive (security gates, destructive-command bans, secret
 handling). Outside the explicit `--hard` flag, confirm before treating
-something as hard; it's a meaningfully different mechanism (the
-`UserPromptSubmit` hook installed at `~/.claude/warden/hooks/`), not just
-"an important rule".
+something as hard; it's a meaningfully different mechanism (a
+`UserPromptSubmit` hook shipped by this plugin), not just "an important
+rule".
 
 Hard rules live in:
 - Global: `~/.claude/warden/hard-rules.md`
 - Project: `<project>/.claude/warden/hard-rules.md`
+
+Create the file (and its directory) if it doesn't exist yet; the plugin
+ships the hook, not the rules. One rule per line, no heading, no bullets
+beyond `- `. The hook strips HTML comments, so a comment header is fine for
+whoever edits the file by hand but costs nothing at injection time.
 
 **Cap hard-rules.md at ~15 lines total, one line per rule.** It gets
 re-injected into every single prompt by a hook — padding it defeats the
