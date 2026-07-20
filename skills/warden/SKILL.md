@@ -69,13 +69,15 @@ thing you must not skip even when the request otherwise seems unambiguous.
 Default every rule to **soft**: it lives in CLAUDE.md / a rules file, loaded
 once per session like everything else there.
 
-Route to **hard** only when the user explicitly says the rule must hold
-no matter what — "always enforce this", "no matter how long the session
-runs", "even if you forget everything else", "this is non-negotiable" — or
-describes an invariant a markdown-only rule wouldn't reliably survive
-(security gates, destructive-command bans, secret handling). Confirm before
-treating something as hard; it's a meaningfully different mechanism
-(see `../../hooks/warden-inject.mjs`), not just "an important rule".
+Route to **hard** when the user runs `/rule --hard <text>`, or when they
+explicitly say the rule must hold no matter what — "always enforce this",
+"no matter how long the session runs", "even if you forget everything else",
+"this is non-negotiable" — or describes an invariant a markdown-only rule
+wouldn't reliably survive (security gates, destructive-command bans, secret
+handling). Outside the explicit `--hard` flag, confirm before treating
+something as hard; it's a meaningfully different mechanism (the
+`UserPromptSubmit` hook installed at `~/.claude/warden/hooks/`), not just
+"an important rule".
 
 Hard rules live in:
 - Global: `~/.claude/warden/hard-rules.md`

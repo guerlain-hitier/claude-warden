@@ -8,4 +8,9 @@ go straight to Step 1 of SKILL.md):
 
 $ARGUMENTS
 
+If the request begins with `--hard`, strip that flag from the rule text and
+treat it as the user explicitly asking for a hard rule. Step 3's routing is
+already decided, so don't re-litigate hard vs soft, but still confirm the
+placement and the ~15 line cap before writing.
+
 If no arguments were given, ask the user what rule they want to add.
