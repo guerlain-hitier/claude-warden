@@ -7,7 +7,7 @@ import { readFileSync, existsSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
 
-const MAX_LINES = 15; // keep the injected block tiny — see SKILL.md Step 3
+const MAX_LINES = 15; // keep the injected block tiny, see SKILL.md Step 3
 
 function readHardRules(path) {
   if (!existsSync(path)) return null;
@@ -24,7 +24,7 @@ function main() {
   try {
     input = readFileSync(0, "utf8");
   } catch {
-    // no stdin — nothing to key project path off of, fall back to global only
+    // no stdin, so no project path to key off; global only
   }
 
   let cwd = process.cwd();
@@ -32,10 +32,10 @@ function main() {
     const parsed = JSON.parse(input);
     if (parsed.cwd) cwd = parsed.cwd;
   } catch {
-    // malformed/absent stdin JSON — proceed with process.cwd()
+    // malformed/absent stdin JSON, fall back to process.cwd()
   }
 
-  // must match the install scripts, which honor the same override
+  // rules live in the user's config dir, not the plugin, so they survive updates
   const configDir = process.env.CLAUDE_CONFIG_DIR || join(homedir(), ".claude");
   const globalPath = join(configDir, "warden", "hard-rules.md");
   const projectPath = join(cwd, ".claude", "warden", "hard-rules.md");
