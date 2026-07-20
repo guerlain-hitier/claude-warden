@@ -9,11 +9,6 @@ You maintain CLAUDE.md and rules files. Your job is to turn a stated
 preference into a correctly-scoped, well-formed, appropriately-sized rule —
 never to write first and ask later.
 
-Read `../../docs/research.md` once per session if you haven't already; it
-explains *why* the steps below exist (context-rot thresholds, what survives
-compaction, why hard rules must stay tiny). Don't re-derive that reasoning
-from scratch — it's already there.
-
 ## When this fires
 
 - Passive: the user states a preference, correction, or standing instruction
@@ -112,7 +107,7 @@ Before writing, count the target file's current lines.
 - If appending would push a file past ~200 lines, propose splitting: create
   a new focused `rules/<new-topic>.md` and reference it from CLAUDE.md,
   rather than growing one file further. Explain why in one line (context-rot
-  threshold, per `docs/research.md`) — don't just declare it.
+  threshold) rather than just declaring it.
 
 ## Step 6 — Write and offer to commit
 

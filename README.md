@@ -15,8 +15,7 @@ Two independent pieces:
 - **A `UserPromptSubmit` hook.** Re-injects a short, curated set of
   *invariant* rules every turn, read live off disk, so they survive context
   compaction and long-session summarization that ordinary CLAUDE.md content
-  does not. See [`docs/research.md`](docs/research.md) for the community
-  research behind this.
+  does not.
 
 ## Why
 
@@ -75,8 +74,6 @@ skills/warden/SKILL.md      the interactive rule-formulation skill
 commands/rule.md            the /rule slash command shim
 hooks/warden-inject.mjs     UserPromptSubmit hook: re-injects hard-rules.md live
 scripts/merge-settings.mjs  additive settings.json merge used by installers
-docs/research.md            sourced research this design is based on
-docs/design.md              the design spec this was built from
 install.sh / install.ps1    installers
 ```
 

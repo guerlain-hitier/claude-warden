@@ -22,11 +22,6 @@ Copy-Item (Join-Path $ScriptDir "skills\warden\SKILL.md") (Join-Path $ClaudeDir 
 Copy-Item (Join-Path $ScriptDir "commands\rule.md") (Join-Path $ClaudeDir "commands\rule.md") -Force
 Copy-Item (Join-Path $ScriptDir "hooks\warden-inject.mjs") (Join-Path $ClaudeDir "warden\hooks\warden-inject.mjs") -Force
 
-$researchDest = Join-Path $ClaudeDir "warden\research.md"
-if (-not (Test-Path $researchDest)) {
-    Copy-Item (Join-Path $ScriptDir "docs\research.md") $researchDest -Force
-}
-
 $hardRulesPath = Join-Path $ClaudeDir "warden\hard-rules.md"
 if (-not (Test-Path $hardRulesPath)) {
     @'
@@ -34,7 +29,7 @@ if (-not (Test-Path $hardRulesPath)) {
 Global hard rules — re-injected into EVERY prompt by the warden-inject hook.
 Keep this to a handful of one-line, non-negotiable invariants (max ~15 lines
 total). Anything longer belongs in your regular CLAUDE.md / rules files
-instead — see ~/.claude/warden/research.md for why.
+instead.
 -->
 '@ | Set-Content -Encoding utf8 $hardRulesPath
 }

@@ -18,7 +18,6 @@ mkdir -p "$CLAUDE_DIR/skills/warden" "$CLAUDE_DIR/commands" "$CLAUDE_DIR/warden/
 cp "$SCRIPT_DIR/skills/warden/SKILL.md" "$CLAUDE_DIR/skills/warden/SKILL.md"
 cp "$SCRIPT_DIR/commands/rule.md" "$CLAUDE_DIR/commands/rule.md"
 cp "$SCRIPT_DIR/hooks/warden-inject.mjs" "$CLAUDE_DIR/warden/hooks/warden-inject.mjs"
-cp -n "$SCRIPT_DIR/docs/research.md" "$CLAUDE_DIR/warden/research.md" 2>/dev/null || true
 
 if [ ! -f "$CLAUDE_DIR/warden/hard-rules.md" ]; then
   cat > "$CLAUDE_DIR/warden/hard-rules.md" <<'EOF'
@@ -26,7 +25,7 @@ if [ ! -f "$CLAUDE_DIR/warden/hard-rules.md" ]; then
 Global hard rules — re-injected into EVERY prompt by the warden-inject hook.
 Keep this to a handful of one-line, non-negotiable invariants (max ~15 lines
 total). Anything longer belongs in your regular CLAUDE.md / rules files
-instead — see ~/.claude/warden/research.md for why.
+instead.
 -->
 EOF
 fi

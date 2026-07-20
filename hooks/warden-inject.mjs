@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 // UserPromptSubmit hook: re-injects "hard" (invariant) rules on every turn,
 // read live off disk, so they can never be lost to context compaction or
-// summarized-away conversation history. See docs/research.md for why this
-// exists instead of just relying on CLAUDE.md.
+// summarized-away conversation history.
 
 import { readFileSync, existsSync } from "node:fs";
 import { homedir } from "node:os";
