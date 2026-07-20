@@ -135,10 +135,10 @@ Never write to hard-rules.md while pretending it's taking effect.
 
 **Cap hard-rules.md at ~15 lines total, one line per rule.** It gets
 re-injected into every single prompt, so padding it defeats the purpose and
-becomes its own context-rot source. Lines past the cap are silently dropped
-by the hook, so never let the file exceed it. If it's already near the cap,
-say so and ask the user to either trim an existing entry or accept soft
-placement instead:
+becomes its own context-rot source. Lines past the cap are not injected; the
+hook warns when that happens, but a warning is not a fix, so never let the
+file exceed it. If it's already near the cap, say so and ask the user to
+either trim an existing entry or accept soft placement instead:
 
 > "hard-rules.md is already at 13 lines. This gets injected on every turn,
 > so I'd rather not pad it further. Trim something, or is CLAUDE.md alone
