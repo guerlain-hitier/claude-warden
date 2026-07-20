@@ -36,16 +36,16 @@ settings.json merge step).
 
 **macOS / Linux / Git Bash:**
 ```bash
-git clone https://github.com/<you>/claude-warden.git
+git clone https://github.com/guerlain-hitier/claude-warden.git
 cd claude-warden
-./install.sh
+bash install.sh
 ```
 
 **Windows PowerShell:**
 ```powershell
-git clone https://github.com/<you>/claude-warden.git
+git clone https://github.com/guerlain-hitier/claude-warden.git
 cd claude-warden
-./install.ps1
+powershell -ExecutionPolicy Bypass -File ./install.ps1
 ```
 
 The installer only adds files under `~/.claude/` (skill, command, hook
