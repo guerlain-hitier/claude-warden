@@ -52,7 +52,7 @@ function main() {
   if (projectRules) sections.push(`Project hard rules:\n${projectRules}`);
 
   const additionalContext =
-    "[warden] These rules are invariant — hold regardless of session length " +
+    "[warden] These rules are invariant, hold regardless of session length " +
     "or compaction:\n\n" +
     sections.join("\n\n");
 
