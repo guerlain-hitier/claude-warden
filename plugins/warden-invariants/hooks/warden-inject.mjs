@@ -15,8 +15,13 @@ function readHardRules(path) {
   // the file, not a rule, and it would eat the line budget every turn
   const text = readFileSync(path, "utf8").replace(/<!--[\s\S]*?-->/g, "").trim();
   if (!text) return null;
-  const lines = text.split("\n").filter((l) => l.trim()).slice(0, MAX_LINES);
-  return lines.join("\n");
+  const lines = text.split("\n").filter((l) => l.trim());
+  return {
+    text: lines.slice(0, MAX_LINES).join("\n"),
+    dropped: Math.max(0, lines.length - MAX_LINES),
+    total: lines.length,
+    path,
+  };
 }
 
 function main() {
@@ -48,13 +53,28 @@ function main() {
   }
 
   const sections = [];
-  if (globalRules) sections.push(`Global hard rules:\n${globalRules}`);
-  if (projectRules) sections.push(`Project hard rules:\n${projectRules}`);
+  if (globalRules) sections.push(`Global hard rules:\n${globalRules.text}`);
+  if (projectRules) sections.push(`Project hard rules:\n${projectRules.text}`);
+
+  // truncation is silent data loss, so make it visible in both channels
+  const overflowing = [globalRules, projectRules].filter((r) => r && r.dropped);
+  for (const r of overflowing) {
+    process.stderr.write(
+      `[warden] ${r.path} has ${r.total} rules; only the first ${MAX_LINES} ` +
+        `are injected. Trim it.\n`
+    );
+  }
+  const warnings = overflowing.map(
+    (r) =>
+      `[warden] WARNING: ${r.path} has ${r.total} rules but the cap is ` +
+      `${MAX_LINES}. The last ${r.dropped} are NOT in effect. Tell the user.`
+  );
 
   const additionalContext =
     "[warden] These rules are invariant, hold regardless of session length " +
     "or compaction:\n\n" +
-    sections.join("\n\n");
+    sections.join("\n\n") +
+    (warnings.length ? `\n\n${warnings.join("\n")}` : "");
 
   process.stdout.write(
     JSON.stringify({
