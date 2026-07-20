@@ -69,10 +69,16 @@ see it. A hook is the only mechanism that runs *after* compaction, on every
 turn, so it can put those lines back.
 
 **What it does.** Reads `hard-rules.md`, strips comments, prints the first
-15 lines back to Claude. That's all. 71 lines in
+15 lines back to Claude, and warns if your file is longer than that. That's
+all. 91 lines in
 [`warden-inject.mjs`](plugins/warden-invariants/hooks/warden-inject.mjs),
-worth skimming before you install. No network calls, no writes, no
+worth skimming before you install. No network calls, no file writes, no
 telemetry.
+
+**The 15 line cap is enforced, not advisory.** Rules past it are not
+injected and therefore not in effect. The hook says so on stderr and in the
+injected block itself, so an over-long file is loud rather than quietly
+broken, but it will not fix it for you.
 
 **Skip it if** you mostly run short sessions, or you'd rather not have code
 running on every prompt. Warden's rule writer works fine without it; you
