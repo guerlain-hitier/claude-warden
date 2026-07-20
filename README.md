@@ -41,21 +41,43 @@ does what it does.
 
 ## Install
 
+Two plugins. The first is the whole rule writer and runs no background code.
+
 ```
 /plugin marketplace add guerlain-hitier/claude-warden
 /plugin install warden@guerlain-plugins
 ```
 
-Requires [Node.js](https://nodejs.org) for the hook.
+That's a complete, useful install. Stop here if you want.
 
-### What it runs on your machine
+### The optional hook
 
-Installing this plugin means a `UserPromptSubmit` hook executes on every
-prompt you send. Warden's hook does exactly one thing: read
-`hard-rules.md`, strip comments, print the first 15 lines back to Claude.
-It's 71 lines in [`hooks/warden-inject.mjs`](hooks/warden-inject.mjs) and
+The second plugin is what makes hard rules survive compaction. It's
+separate, and opt-in, because it adds a `UserPromptSubmit` hook: code that
+runs on every prompt you send.
+
+```
+/plugin install warden-invariants@guerlain-plugins
+```
+
+Requires [Node.js](https://nodejs.org).
+
+**Why it exists.** Everything in CLAUDE.md is loaded once, at session
+start. When a long session compacts, that history gets summarized, and
+rules can go with it. The model isn't ignoring your rule; it can no longer
+see it. A hook is the only mechanism that runs *after* compaction, on every
+turn, so it can put those lines back.
+
+**What it does.** Reads `hard-rules.md`, strips comments, prints the first
+15 lines back to Claude. That's all. 71 lines in
+[`warden-inject.mjs`](plugins/warden-invariants/hooks/warden-inject.mjs),
 worth skimming before you install. No network calls, no writes, no
 telemetry.
+
+**Skip it if** you mostly run short sessions, or you'd rather not have code
+running on every prompt. Warden's rule writer works fine without it; you
+just lose the compaction guarantee, and it'll tell you so rather than
+writing hard rules that silently do nothing.
 
 This is true of any plugin shipping hooks, not just this one. Read them
 before you trust them.
@@ -69,7 +91,8 @@ before you trust them.
 Or just say it in conversation. Warden fires on standing preferences and
 stays quiet on one-off requests.
 
-For an invariant that survives compaction, keep these rare:
+For an invariant that survives compaction, keep these rare. Needs
+`warden-invariants`:
 
 ```
 /warden:rule --hard never force-push to main
@@ -95,11 +118,14 @@ it's worth keeping in whatever repo you sync your dotfiles with.
 ## Layout
 
 ```
-.claude-plugin/plugin.json       plugin manifest
-.claude-plugin/marketplace.json  so the repo can host itself
-skills/rule/SKILL.md             the rule-formulation protocol
-hooks/hooks.json                 registers the UserPromptSubmit hook
-hooks/warden-inject.mjs          reads hard-rules.md, injects it
+.claude-plugin/marketplace.json  lets the repo host both plugins itself
+
+plugins/warden/                  the rule writer, no background code
+  skills/rule/SKILL.md           the rule-formulation protocol
+
+plugins/warden-invariants/       the optional hook
+  hooks/hooks.json               registers UserPromptSubmit
+  hooks/warden-inject.mjs        reads hard-rules.md, injects it
 ```
 
 ## Development
