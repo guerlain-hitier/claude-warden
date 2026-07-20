@@ -93,9 +93,22 @@ Hard rules live in:
 - Project: `<project>/.claude/warden/hard-rules.md`
 
 Create the file (and its directory) if it doesn't exist yet; the plugin
-ships the hook, not the rules. One rule per line, no heading, no bullets
-beyond `- `. The hook strips HTML comments, so a comment header is fine for
-whoever edits the file by hand but costs nothing at injection time.
+ships the mechanism, not the rules. One rule per line, no heading, no
+bullets beyond `- `. The hook strips HTML comments, so a comment header is
+fine for whoever edits the file by hand but costs nothing at injection time.
+
+**Hard rules only take effect if the `warden-invariants` plugin is
+installed.** It's a separate, optional install because it adds a hook that
+runs on every prompt. Before writing a hard rule, check that it's active
+(look for a `[warden]` block in the current context, or ask). If it isn't,
+say so plainly and let the user choose:
+
+> "Hard rules need the `warden-invariants` plugin, which I don't see
+> running. Install it with `/plugin install
+> warden-invariants@guerlain-plugins`, or should this go in CLAUDE.md as a
+> normal rule instead?"
+
+Never write to hard-rules.md while pretending it's taking effect.
 
 **Cap hard-rules.md at ~15 lines total, one line per rule.** It gets
 re-injected into every single prompt by a hook — padding it defeats the

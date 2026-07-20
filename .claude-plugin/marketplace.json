@@ -8,8 +8,17 @@
   "plugins": [
     {
       "name": "warden",
-      "source": "./",
-      "description": "Turns standing preferences into well-formed, correctly-scoped CLAUDE.md rules, and re-injects a handful of invariant rules on every prompt so they survive context compaction. Personal steering, not org-scale policy enforcement.",
+      "source": "./plugins/warden",
+      "description": "Turns standing preferences into well-formed, correctly-scoped CLAUDE.md rules. Asks one question at a time, picks global vs project scope, and keeps rules files small enough that Claude actually follows them. Runs no background code.",
+      "homepage": "https://github.com/guerlain-hitier/claude-warden",
+      "author": {
+        "name": "guerlain-hitier"
+      }
+    },
+    {
+      "name": "warden-invariants",
+      "source": "./plugins/warden-invariants",
+      "description": "Optional companion to warden. Re-injects your hard rules on every prompt so they survive context compaction. Adds a UserPromptSubmit hook that reads one local file and writes nothing.",
       "homepage": "https://github.com/guerlain-hitier/claude-warden",
       "author": {
         "name": "guerlain-hitier"

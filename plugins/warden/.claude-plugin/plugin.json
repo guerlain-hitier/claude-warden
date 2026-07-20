@@ -1,0 +1,12 @@
+{
+  "name": "warden",
+  "description": "Turns standing preferences into well-formed, correctly-scoped CLAUDE.md rules. Asks one question at a time, picks global vs project scope, and keeps rules files small enough that Claude actually follows them. Runs no background code.",
+  "version": "0.2.0",
+  "author": {
+    "name": "guerlain-hitier",
+    "url": "https://github.com/guerlain-hitier"
+  },
+  "repository": "https://github.com/guerlain-hitier/claude-warden",
+  "license": "MIT",
+  "keywords": ["claude-md", "rules", "memory"]
+}

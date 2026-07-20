@@ -1,0 +1,12 @@
+{
+  "name": "warden-invariants",
+  "description": "Optional companion to warden. Re-injects your hard rules on every prompt so they survive context compaction. Adds a UserPromptSubmit hook that reads one local file and writes nothing.",
+  "version": "0.2.0",
+  "author": {
+    "name": "guerlain-hitier",
+    "url": "https://github.com/guerlain-hitier"
+  },
+  "repository": "https://github.com/guerlain-hitier/claude-warden",
+  "license": "MIT",
+  "keywords": ["claude-md", "rules", "hooks", "context"]
+}
