@@ -48,6 +48,18 @@ does what it does.
 
 Requires [Node.js](https://nodejs.org) for the hook.
 
+### What it runs on your machine
+
+Installing this plugin means a `UserPromptSubmit` hook executes on every
+prompt you send. Warden's hook does exactly one thing: read
+`hard-rules.md`, strip comments, print the first 15 lines back to Claude.
+It's 71 lines in [`hooks/warden-inject.mjs`](hooks/warden-inject.mjs) and
+worth skimming before you install. No network calls, no writes, no
+telemetry.
+
+This is true of any plugin shipping hooks, not just this one. Read them
+before you trust them.
+
 ## Use
 
 ```
