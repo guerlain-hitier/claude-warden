@@ -172,6 +172,14 @@ Make the edit. If the target file lives inside a git repository, offer to
 commit it; never commit without asking, and never batch it in with unrelated
 changes.
 
+## When a rule misfires
+
+A rule that produced the wrong behaviour is unclear, not incomplete. Rewrite
+it so its principle covers the case; never append an exception or a sibling
+rule for the incident. If no clearer statement exists, rethink the rule.
+Exceptions come only once the principle is right and a real case still falls
+outside it.
+
 ## What NOT to do
 
 - Don't write anything before Step 4's explicit confirmation.
